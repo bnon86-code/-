@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>نداء الطالبات — المتوسطة الأولى والثانية بالخبر</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#07452C; --green-700:#0B5D3B; --green-500:#12805A;
+    --gold:#C9A227; --gold-soft:#E8D9A0;
+    --paper:#F5F2E9; --paper-2:#FBFAF5;
+    --ink:#17201B; --ink-60:#5A6660; --line:rgba(11,93,59,.18);
+    --font:"Tajawal","Tahoma",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none}
+  input,select{font-family:inherit}
+  .wrap{max-width:560px;margin:0 auto;padding:22px 18px 30px}
+  .hidden{display:none!important}
+
+  /* ===== ولي الأمر ===== */
+  .top{background:linear-gradient(168deg,var(--green-700),var(--green-900));color:#fff;
+    padding:28px 22px 26px;text-align:center}
+  .top .crest{width:46px;height:46px;margin:0 auto 14px;border:2px solid var(--gold);
+    border-radius:50%;display:grid;place-items:center;font-size:20px;color:var(--gold)}
+  .top h1{font-size:26px;font-weight:800}
+  .top p{font-size:13px;color:var(--gold-soft);margin-top:8px;line-height:1.8}
+
+  .card{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:14px;font-weight:500;margin-bottom:7px}
+  .field input,.field select{width:100%;padding:14px;font-size:16px;border:1px solid var(--line);
+    border-radius:10px;background:#fff;color:var(--ink)}
+  .field input:focus,.field select:focus{outline:2px solid var(--green-500);outline-offset:1px;border-color:transparent}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .send{width:100%;background:var(--green-700);color:#fff;font-size:18px;font-weight:700;
+    padding:17px;border-radius:12px;margin-top:6px;transition:background .18s}
+  .send:hover{background:var(--green-500)}
+  .send:disabled{opacity:.55;cursor:not-allowed}
+  .hint{font-size:13px;color:var(--ink-60);line-height:1.9;margin-top:14px;text-align:center}
+  .err{color:#9B2226;font-size:14px;margin-top:10px;text-align:center;min-height:20px;line-height:1.8}
+
+  .done{text-align:center;padding:36px 20px}
+  .done .tick{width:74px;height:74px;margin:0 auto 20px;border-radius:50%;background:var(--green-700);
+    color:#fff;display:grid;place-items:center;font-size:36px}
+  .done h3{font-size:24px;font-weight:800;margin-bottom:10px}
+  .done p{color:var(--ink-60);line-height:2;font-size:15px}
+  .done .name{font-size:28px;font-weight:800;color:var(--green-700);margin:16px 0}
+  .again{margin-top:26px;background:transparent;color:var(--green-700);border:1px solid var(--line);
+    padding:13px 26px;border-radius:10px;font-size:15px;font-weight:500}
+
+  /* مدخل الإدارة */
+  .staff{text-align:center;padding:8px 18px 46px}
+  .staff button{background:transparent;color:var(--ink-60);font-size:12.5px;
+    padding:8px 14px;border-bottom:1px dotted var(--ink-60)}
+
+  /* ===== رمز الدخول ===== */
+  .lock{position:fixed;inset:0;background:rgba(7,69,44,.97);z-index:20;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#fff}
+  .lock .ic{font-size:34px;color:var(--gold);margin-bottom:16px}
+  .lock h3{font-size:20px;font-weight:800;margin-bottom:8px}
+  .lock p{font-size:13.5px;color:var(--gold-soft);margin-bottom:22px;text-align:center;line-height:1.9}
+  .lock input{width:210px;padding:15px;font-size:24px;text-align:center;letter-spacing:10px;
+    border:1px solid rgba(233,217,160,.4);border-radius:12px;background:rgba(255,255,255,.08);
+    color:#fff;font-family:inherit}
+  .lock input:focus{outline:2px solid var(--gold)}
+  .lock .go{margin-top:12px;width:210px;padding:15px;background:var(--gold);color:var(--green-900);
+    font-size:16px;font-weight:800;border-radius:12px}
+  .lock .cancel{margin-top:10px;background:transparent;color:var(--gold-soft);font-size:13px;padding:8px}
+  .lock .msg{color:#F1B0B0;font-size:14px;margin-top:12px;min-height:20px}
+
+  /* ===== شاشة المدرسة ===== */
+  .screen{position:fixed;inset:0;overflow-y:auto;background:var(--green-900);color:#fff;z-index:15}
+  .s-top{display:flex;justify-content:space-between;align-items:center;
+    padding:18px 24px;border-bottom:1px solid rgba(233,217,160,.25)}
+  .s-top h2{font-size:19px;font-weight:700}
+  .clock{font-size:19px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+  .calls{padding:20px;display:grid;gap:14px;max-width:1100px;margin:0 auto}
+  .call{background:#fff;color:var(--ink);border-radius:16px;padding:20px 22px;
+    display:flex;align-items:center;gap:16px;border-right:8px solid var(--gold)}
+  .call.fresh{animation:pop .5s ease-out}
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  .call>div:first-child{flex:1}
+  .call .n{font-size:clamp(25px,5vw,42px);font-weight:800;line-height:1.3}
+  .call .meta{font-size:14.5px;color:var(--ink-60);margin-top:6px}
+  .ok{background:var(--green-700);color:#fff;padding:13px 16px;border-radius:10px;
+    font-size:14.5px;font-weight:700;white-space:nowrap}
+  .ok:disabled{opacity:.5}
+  .empty{text-align:center;padding:64px 24px;color:var(--gold-soft)}
+  .empty div:first-child{font-size:44px;margin-bottom:14px;opacity:.6}
+  .empty p{font-size:17px;line-height:2}
+  .tools{display:flex;gap:10px;justify-content:center;padding:0 20px;flex-wrap:wrap}
+  .tool{background:transparent;color:var(--gold-soft);border:1px solid rgba(233,217,160,.3);
+    padding:10px 16px;border-radius:9px;font-size:13px}
+  .s-foot{text-align:center;padding:14px 14px 36px;color:rgba(255,255,255,.5);font-size:13px;line-height:1.9}
+  .offline{background:#7A1F22;color:#fff;text-align:center;padding:9px;font-size:13.5px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ========== ولي الأمر ========== -->
+<header class="top">
+  <div class="crest">✦</div>
+  <h1>نداء الطالبات</h1>
+  <p>المتوسطة الأولى والثانية بالخبر<br>سجّلي بيانات ابنتك ليصل النداء لإدارة المدرسة</p>
+</header>
+
+<div class="wrap">
+  <div id="form-card" class="card">
+    <div class="field">
+      <label for="sName">اسم الطالبة</label>
+      <input id="sName" type="text" placeholder="الاسم الثلاثي" autocomplete="off">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="sGrade">المرحلة</label>
+        <select id="sGrade">
+          <option value="">اختاري</option>
+          <option>أول متوسط</option><option>ثاني متوسط</option><option>ثالث متوسط</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sClass">الصف</label>
+        <select id="sClass">
+          <option value="">اختاري</option>
+          <option>١</option><option>٢</option><option>٣</option>
+          <option>٤</option><option>٥</option><option>٦</option>
+        </select>
+      </div>
+    </div>
+    <button id="sendBtn" class="send" onclick="sendCall()">إرسال النداء</button>
+    <div id="err" class="err"></div>
+    <p class="hint">النداء يصل خلال ثوانٍ. يُرجى الانتظار عند بوابة المدرسة وإحضار الهوية.</p>
+  </div>
+
+  <div id="done-card" class="done card hidden">
+    <div class="tick">✓</div>
+    <h3>وصل النداء</h3>
+    <div class="name" id="doneName"></div>
+    <p id="doneMsg"></p>
+    <button class="again" onclick="resetForm()">نداء طالبة أخرى</button>
+  </div>
+</div>
+
+<div class="staff"><button onclick="askPin()">دخول منسوبات المدرسة</button></div>
+
+<!-- ========== رمز الدخول ========== -->
+<section id="lock" class="lock hidden">
+  <div class="ic">🔒</div>
+  <h3>شاشة إدارة المدرسة</h3>
+  <p>هذه الشاشة مخصصة لمنسوبات المدرسة<br>أدخلي رمز الدخول للمتابعة</p>
+  <input id="pin" type="password" inputmode="numeric" maxlength="6" placeholder="••••"
+         onkeydown="if(event.key==='Enter')unlock()">
+  <button class="go" onclick="unlock()">دخول</button>
+  <button class="cancel" onclick="closePin()">إلغاء</button>
+  <div class="msg" id="lockMsg"></div>
+</section>
+
+<!-- ========== شاشة المدرسة ========== -->
+<section id="screen" class="screen hidden">
+  <div id="offline" class="offline hidden">انقطع الاتصال بالجدول — تُعاد المحاولة تلقائياً</div>
+  <div class="s-top">
+    <h2>الطالبات المطلوبات للخروج</h2>
+    <div class="clock" id="clock">--:--</div>
+  </div>
+  <div id="calls" class="calls"></div>
+  <div class="tools">
+    <button class="tool" onclick="clearAll()">مسح جميع النداءات</button>
+    <button class="tool" onclick="lockScreen()">قفل الشاشة</button>
+  </div>
+  <p class="s-foot" id="foot"></p>
+</section>
+
+<script>
+/* ===================================================================
+   الإعدادات — عدّلي السطرين التاليين فقط
+   =================================================================== */
+const API = 'ضعي_هنا_رابط_تطبيق_الويب';   /* رابط Apps Script المنتهي بـ /exec */
+const PIN = '1122';                        /* رمز دخول شاشة المدرسة */
+/* =================================================================== */
+
+let seen = new Set(), soundOn = false, timer = null, clockTimer = null;
+
+/* ---------- الاتصال بالجدول ---------- */
+async function apiGet(){
+  const res = await fetch(API + '?t=' + Date.now());
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'خطأ في الجدول');
+  return data;
+}
+async function apiPost(payload){
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'خطأ في الجدول');
+  return data;
+}
+function apiReady(){ return API.indexOf('http') === 0; }
+
+/* ---------- ولي الأمر ---------- */
+async function sendCall(){
+  const name  = document.getElementById('sName').value.trim();
+  const grade = document.getElementById('sGrade').value;
+  const cls   = document.getElementById('sClass').value;
+  const err   = document.getElementById('err');
+  const btn   = document.getElementById('sendBtn');
+
+  if(!apiReady()){ err.textContent = 'الصفحة غير مرتبطة بالجدول بعد. راجعي إعداد الرابط في الكود.'; return; }
+  if(name.length < 3){ err.textContent = 'اكتبي اسم الطالبة كاملاً'; return; }
+  if(!grade || !cls){ err.textContent = 'اختاري المرحلة والصف'; return; }
+
+  err.textContent = ''; btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+  try{
+    await apiPost({ action:'add', name, grade, cls });
+    document.getElementById('doneName').textContent = name;
+    document.getElementById('doneMsg').textContent =
+      `${grade} / الصف ${cls} — تم تنبيه المدرسة، وسيتم إخراج الطالبة بعد التحقق من الهوية.`;
+    document.getElementById('form-card').classList.add('hidden');
+    document.getElementById('done-card').classList.remove('hidden');
+    window.scrollTo(0,0);
+  }catch(e){
+    err.textContent = 'لم يصل النداء. تحققي من الاتصال بالإنترنت وأعيدي المحاولة.';
+  }
+  btn.disabled = false; btn.textContent = 'إرسال النداء';
+}
+
+function resetForm(){
+  document.getElementById('sName').value='';
+  document.getElementById('sGrade').value='';
+  document.getElementById('sClass').value='';
+  document.getElementById('done-card').classList.add('hidden');
+  document.getElementById('form-card').classList.remove('hidden');
+}
+
+/* ---------- الرمز السري ---------- */
+function askPin(){
+  document.getElementById('lockMsg').textContent='';
+  document.getElementById('pin').value='';
+  document.getElementById('lock').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('pin').focus(),100);
+}
+function closePin(){ document.getElementById('lock').classList.add('hidden'); }
+
+function unlock(){
+  const v = document.getElementById('pin').value.trim();
+  if(v !== PIN){
+    document.getElementById('lockMsg').textContent = 'الرمز غير صحيح';
+    document.getElementById('pin').value = '';
+    return;
+  }
+  closePin();
+  document.getElementById('screen').classList.remove('hidden');
+  soundOn = true; seen.clear();
+  render();
+  clearInterval(timer); timer = setInterval(render, 5000);
+  startClock();
+}
+function lockScreen(){
+  clearInterval(timer); clearInterval(clockTimer); soundOn = false;
+  document.getElementById('screen').classList.add('hidden');
+  window.scrollTo(0,0);
+}
+
+/* ---------- شاشة المدرسة ---------- */
+async function render(){
+  const box  = document.getElementById('calls');
+  const foot = document.getElementById('foot');
+  let list;
+  try{
+    list = (await apiGet()).calls;
+    document.getElementById('offline').classList.add('hidden');
+  }catch(e){
+    document.getElementById('offline').classList.remove('hidden');
+    return;
+  }
+  list.sort((a,b)=> new Date(b.at) - new Date(a.at));
+
+  if(!list.length){
+    box.innerHTML = `<div class="empty"><div>🔔</div><p>لا توجد نداءات حالياً<br>ستظهر أسماء الطالبات هنا فور وصول النداء</p></div>`;
+    foot.textContent = 'آخر تحديث ' + nowText();
+    return;
+  }
+  let isNew = false;
+  box.innerHTML = list.map(c=>{
+    const fresh = !seen.has(c.id);
+    if(fresh){ seen.add(c.id); isNew = true; }
+    const t = new Date(c.at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="call ${fresh?'fresh':''}">
+      <div><div class="n">${esc(c.name)}</div>
+      <div class="meta">${esc(c.grade)} — الصف ${esc(c.cls)} • ${t}</div></div>
+      <button class="ok" onclick="removeCall('${c.id}',this)">خرجت الطالبة</button>
+    </div>`;
+  }).join('');
+  foot.textContent = `عدد النداءات المنتظرة: ${list.length} — آخر تحديث ${nowText()}`;
+  if(isNew && soundOn) beep();
+}
+
+async function removeCall(id, btn){
+  btn.disabled = true; btn.textContent = 'جارٍ التسجيل…';
+  try{ await apiPost({ action:'done', id }); }
+  catch(e){ btn.disabled = false; btn.textContent = 'أعيدي المحاولة'; return; }
+  seen.delete(id); render();
+}
+
+async function clearAll(){
+  if(!confirm('مسح جميع النداءات المنتظرة من الشاشة؟ ستبقى مسجّلة في الجدول.')) return;
+  try{ await apiPost({ action:'clear' }); seen.clear(); render(); }
+  catch(e){ alert('تعذّر المسح. تحققي من الاتصال.'); }
+}
+
+/* ---------- أدوات ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function nowText(){ return new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}); }
+function startClock(){
+  const c = document.getElementById('clock');
+  const upd = ()=> c.textContent = nowText();
+  upd(); clearInterval(clockTimer); clockTimer = setInterval(upd, 20000);
+}
+function beep(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    [880,1175].forEach((f,i)=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.frequency.value=f; o.type='sine'; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime+i*0.22);
+      g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime+i*0.22+0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+i*0.22+0.2);
+      o.start(ctx.currentTime+i*0.22); o.stop(ctx.currentTime+i*0.22+0.25);
+    });
+  }catch(e){}
+}
+</script>
+</body>
+</html>
